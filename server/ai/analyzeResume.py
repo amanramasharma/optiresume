@@ -1,4 +1,4 @@
-from server.ai.llm_processor import extract_with_llm
+# from server.ai.llm_processor import extract_with_llm
 from server.ai.gpt_extractor import extract_with_gpt
 
 def analyzeResume(text: str) -> dict:
