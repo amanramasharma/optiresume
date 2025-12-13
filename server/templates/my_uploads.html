@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Uploads | OptiResume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --blue:#2563eb;
+      --dark:#0f172a;
+      --muted:#64748b;
+      --bg:#f1f5f9;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --row:#ffffff;
+      --rowHover:#f8fafc;
+      --goodBg:#ecfdf5; --goodFg:#065f46; --goodBd:#bbf7d0;
+      --midBg:#fffbeb;  --midFg:#92400e; --midBd:#fde68a;
+      --badBg:#fef2f2;  --badFg:#991b1b; --badBd:#fecaca;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:'Inter',sans-serif;background:var(--bg);color:#0f172a}
+    .layout{display:flex;min-height:100vh}
+
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#0b1220,#0f172a);
+      color:#fff;
+      padding:1.75rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .logo{
+      font-size:1.5rem;
+      font-weight:800;
+      text-align:center;
+      padding-bottom:1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    nav{margin-top:1.5rem;display:flex;flex-direction:column;gap:.4rem}
+    nav a{
+      display:flex;align-items:center;gap:.6rem;
+      padding:.8rem .95rem;color:#cbd5e1;text-decoration:none;
+      border-radius:12px;transition:.2s;
+    }
+    nav a:hover, nav a.active{background:rgba(255,255,255,.08);color:#fff}
+    .sidebar .foot{
+      margin-top:auto;padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      font-size:.85rem;color:#94a3b8;
+    }
+
+    .content{flex:1;padding:2rem;max-width:1150px;width:100%}
+    h1{margin:0 0 .35rem;font-size:1.6rem;letter-spacing:-.02em}
+    .sub{color:var(--muted);margin-bottom:1.25rem;font-size:.95rem}
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .toolbar{
+      padding:1rem 1.15rem;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      background:linear-gradient(180deg,#fff, #fbfdff);
+    }
+    .leftTools{display:flex;align-items:center;gap:.75rem;flex:1}
+    .search{
+      flex:1;
+      display:flex;align-items:center;gap:.55rem;
+      border:1px solid var(--border);
+      background:#fff;border-radius:12px;
+      padding:.6rem .75rem;
+    }
+    .search i{color:var(--muted)}
+    .search input{
+      border:none;outline:none;width:100%;
+      font-size:.95rem;background:transparent;
+    }
+    .sort{
+      display:flex;align-items:center;gap:.5rem;
+      border:1px solid var(--border);
+      background:#fff;border-radius:12px;
+      padding:.55rem .7rem;
+      white-space:nowrap;
+    }
+    .sort select{
+      border:none;outline:none;background:transparent;
+      font-size:.92rem;color:#0f172a;cursor:pointer;
+    }
+    .count{
+      color:var(--muted);
+      font-size:.9rem;
+      white-space:nowrap;
+    }
+
+    table{width:100%;border-collapse:collapse}
+    thead th{
+      text-align:left;font-size:.78rem;
+      letter-spacing:.04em;text-transform:uppercase;
+      color:var(--muted);
+      padding:.75rem .9rem;
+      border-bottom:1px solid var(--border);
+      background:#fff;
+    }
+    tbody td{
+      padding:.9rem .9rem;
+      border-bottom:1px solid var(--border);
+      vertical-align:middle;
+      font-size:.95rem;
+      background:var(--row);
+    }
+    tbody tr{transition:.15s; cursor:pointer}
+    tbody tr:hover td{background:var(--rowHover)}
+    tbody tr:last-child td{border-bottom:none}
+
+    .file{
+      font-weight:650;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+      max-width:420px;
+    }
+    .date{color:var(--muted);font-size:.9rem}
+    .badge{
+      padding:.25rem .7rem;border-radius:999px;
+      font-size:.8rem;font-weight:800;display:inline-flex;
+      align-items:center;gap:.35rem;border:1px solid transparent;
+    }
+    .badge.good{background:var(--goodBg);color:var(--goodFg);border-color:var(--goodBd)}
+    .badge.mid{background:var(--midBg);color:var(--midFg);border-color:var(--midBd)}
+    .badge.bad{background:var(--badBg);color:var(--badFg);border-color:var(--badBd)}
+
+    .action a{
+      display:inline-flex;align-items:center;gap:.4rem;
+      padding:.45rem .9rem;background:var(--blue);color:#fff;
+      border-radius:10px;font-size:.9rem;font-weight:650;
+      text-decoration:none;transition:.2s;
+    }
+    .action a:hover{opacity:.92;transform:translateY(-1px)}
+
+    .empty{
+      padding:2.2rem 1.25rem;
+      color:var(--muted);
+      text-align:center;
+      font-size:.95rem;
+      line-height:1.45;
+    }
+    .cta{
+      display:inline-flex;align-items:center;gap:.5rem;
+      margin-top:1rem;
+      background:var(--blue);
+      color:#fff;text-decoration:none;
+      padding:.7rem 1rem;border-radius:12px;
+      font-weight:750;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">OptiResume</div>
+      <nav>
+        <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+        <a href="/my_uploads" class="active"><i class="ri-folder-line"></i> My Uploads</a>
+        <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+
+      <div class="foot">
+        <div style="font-weight:700;color:#e2e8f0;">Workspace</div>
+        <div>Resume Intelligence</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>My Uploads</h1>
+      <div class="sub">Search, sort, and open any previous resume analysis.</div>
+
+      <div class="card">
+        <div class="toolbar">
+          <div class="leftTools">
+            <div class="search">
+              <i class="ri-search-line"></i>
+              <input id="searchInput" placeholder="Search by file name..." autocomplete="off" />
+            </div>
+            <div class="sort">
+              <i class="ri-arrow-up-down-line" style="color:var(--muted)"></i>
+              <select id="sortSelect">
+                <option value="newest">Newest first</option>
+                <option value="oldest">Oldest first</option>
+                <option value="best">Best score</option>
+              </select>
+            </div>
+          </div>
+          <div class="count"><span id="visibleCount">0</span> shown</div>
+        </div>
+
+        {% if uploads %}
+        <table id="uploadsTable">
+          <thead>
+            <tr>
+              <th>Resume</th>
+              <th>Uploaded</th>
+              <th>Score</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="uploadsBody">
+            {% for item in uploads %}
+            <tr class="upload-row" data-href="/view_resume/{{ item._id }}">
+              <td class="file">{{ item.file_name }}</td>
+
+              <!-- keep ISO-ish string for JS formatting -->
+              <td class="date" data-raw="{{ item.uploaded_at }}">{{ item.uploaded_at[:10] }}</td>
+
+              <td class="score">
+                {% if item.resume_score %}
+                  {% set s = item.resume_score|int %}
+                  {% if s >= 80 %}
+                    <span class="badge good"><i class="ri-check-line"></i> {{ s }} / 100</span>
+                  {% elif s >= 60 %}
+                    <span class="badge mid"><i class="ri-alert-line"></i> {{ s }} / 100</span>
+                  {% else %}
+                    <span class="badge bad"><i class="ri-close-line"></i> {{ s }} / 100</span>
+                  {% endif %}
+                {% else %}
+                  <span class="badge mid">-- / 100</span>
+                {% endif %}
+              </td>
+
+              <td class="action">
+                <a href="/view_resume/{{ item._id }}" onclick="event.stopPropagation()">
+                  <i class="ri-eye-line"></i> View
+                </a>
+              </td>
+
+              <!-- hidden for dashboard parsing -->
+              <td class="skills" style="display:none;">
+                {{ ", ".join(item.skills) if item.skills else "" }}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty">
+          No uploads yet. Upload a resume from your dashboard to generate your first analysis.
+          <br />
+          <a class="cta" href="/site/dashboard.html"><i class="ri-upload-cloud-2-line"></i> Go to Dashboard</a>
+        </div>
+        {% endif %}
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id)
+
+    function parseScoreFromRow(row) {
+      const badge = row.querySelector(".badge")
+      if (!badge) return -1
+      const m = badge.textContent.match(/\d+/)
+      return m ? parseInt(m[0], 10) : -1
+    }
+
+    function parseDateFromRow(row) {
+      const td = row.querySelector("td.date")
+      const raw = td?.getAttribute("data-raw") || ""
+      const d = new Date(raw)
+      return isNaN(d.getTime()) ? new Date("1970-01-01") : d
+    }
+
+    function formatHumanDate(raw) {
+      const d = new Date(raw)
+      if (isNaN(d.getTime())) return ""
+      const now = new Date()
+      const diffMs = now - d
+      const days = Math.floor(diffMs / (1000 * 60 * 60 * 24))
+      if (days === 0) return "Today"
+      if (days === 1) return "Yesterday"
+      if (days < 7) return `${days} days ago`
+      return d.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" })
+    }
+
+    function applyHumanDates() {
+      document.querySelectorAll("td.date[data-raw]").forEach(td => {
+        const raw = td.getAttribute("data-raw")
+        td.textContent = formatHumanDate(raw)
+      })
+    }
+
+    function updateVisibleCount() {
+      const rows = Array.from(document.querySelectorAll("tr.upload-row"))
+      const visible = rows.filter(r => r.style.display !== "none").length
+      const el = $("visibleCount")
+      if (el) el.textContent = visible
+    }
+
+    function wireRowClicks() {
+      document.querySelectorAll("tr.upload-row[data-href]").forEach(row => {
+        row.addEventListener("click", () => {
+          const href = row.getAttribute("data-href")
+          if (href) window.location.href = href
+        })
+      })
+    }
+
+    function filterRows(q) {
+      const query = (q || "").trim().toLowerCase()
+      const rows = Array.from(document.querySelectorAll("tr.upload-row"))
+      rows.forEach(row => {
+        const name = row.querySelector("td.file")?.textContent?.toLowerCase() || ""
+        row.style.display = name.includes(query) ? "" : "none"
+      })
+      updateVisibleCount()
+    }
+
+    function sortRows(mode) {
+      const body = $("uploadsBody")
+      if (!body) return
+
+      const rows = Array.from(body.querySelectorAll("tr.upload-row"))
+
+      rows.sort((a, b) => {
+        if (mode === "best") {
+          return parseScoreFromRow(b) - parseScoreFromRow(a)
+        }
+        if (mode === "oldest") {
+          return parseDateFromRow(a) - parseDateFromRow(b)
+        }
+        return parseDateFromRow(b) - parseDateFromRow(a) // newest
+      })
+
+      rows.forEach(r => body.appendChild(r))
+      updateVisibleCount()
+    }
+
+    const search = $("searchInput")
+    const sort = $("sortSelect")
+
+    if (search) search.addEventListener("input", (e) => filterRows(e.target.value))
+    if (sort) sort.addEventListener("change", (e) => sortRows(e.target.value))
+
+    applyHumanDates()
+    wireRowClicks()
+    sortRows("newest")
+    updateVisibleCount()
+  </script>
+</body>
+</html>

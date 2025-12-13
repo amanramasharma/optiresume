@@ -1,0 +1,31 @@
+# env
+.env
+*.env
+
+# python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# mac/windows
+.DS_Store
+Thumbs.db
+
+# logs
+*.log
+
+# node (if any)
+node_modules/
+
+# IDE
+.vscode/
+.idea/
+
+# cache
+.pytest_cache/
+.mypy_cache/.env
+.env

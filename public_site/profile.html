@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile Settings | OptiResume</title>
+
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --blue:#2563eb;
+      --bg:#f1f5f9;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --muted:#64748b;
+      --dark:#0f172a;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--dark);
+    }
+    .layout{display:flex; min-height:100vh}
+
+    /* Sidebar */
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#0b1220,#0f172a);
+      color:#fff;
+      padding:1.75rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .logo{
+      font-size:1.5rem;
+      font-weight:800;
+      text-align:center;
+      padding-bottom:1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    nav{margin-top:1.5rem; display:flex; flex-direction:column; gap:.4rem}
+    nav a{
+      display:flex; align-items:center; gap:.6rem;
+      padding:.8rem .95rem;
+      color:#cbd5e1; text-decoration:none;
+      border-radius:12px; transition:.2s;
+    }
+    nav a:hover, nav a.active{
+      background:rgba(255,255,255,.08); color:#fff;
+    }
+    .sidebar .foot{
+      margin-top:auto;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      font-size:.85rem;
+      color:#94a3b8;
+      line-height:1.35;
+    }
+
+    /* Main */
+    .content{flex:1; padding:2rem; max-width:1100px}
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:1.25rem;
+    }
+    .title{
+      margin:0;
+      font-size:1.55rem;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      margin-top:.35rem;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.35;
+    }
+
+    .wrap{
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:1.25rem;
+      align-items:start;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding:1.05rem 1.25rem .75rem;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+    }
+    .hd h2{margin:0; font-size:1rem; letter-spacing:-.01em}
+    .bd{padding:1.1rem 1.25rem 1.25rem}
+
+    .mini{
+      color:var(--muted);
+      font-size:.85rem;
+      line-height:1.35;
+    }
+
+    .profileBox{
+      display:flex;
+      flex-direction:column;
+      gap:1rem;
+    }
+    .avatar{
+      width:56px;
+      height:56px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(37,99,235,.16), rgba(34,197,94,.14));
+      border:1px solid rgba(37,99,235,.22);
+      color:var(--blue);
+      font-weight:900;
+      font-size:1.2rem;
+    }
+    .who{
+      display:flex;
+      align-items:center;
+      gap:.9rem;
+    }
+    .who .name{
+      font-weight:900;
+      font-size:1.05rem;
+      letter-spacing:-.01em;
+    }
+    .who .mail{
+      color:var(--muted);
+      font-size:.9rem;
+      margin-top:.15rem;
+      word-break:break-word;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.35rem .7rem;
+      border-radius:999px;
+      font-size:.82rem;
+      font-weight:800;
+      border:1px solid var(--border);
+      background:#fff;
+      color:var(--dark);
+      width:max-content;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1rem;
+    }
+    .row{display:flex; flex-direction:column; gap:.45rem}
+    label{font-weight:800; font-size:.9rem}
+    input{
+      width:100%;
+      padding:.7rem .75rem;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:.95rem;
+      outline:none;
+      background:#fff;
+    }
+    input:focus{
+      border-color:rgba(37,99,235,.55);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+
+    .pwWrap{position:relative}
+    .pwBtn{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      color:var(--muted);
+      padding:6px;
+      border-radius:10px;
+    }
+    .pwBtn:hover{background:#f8fafc; color:var(--dark)}
+
+    .strength{
+      display:flex;
+      align-items:center;
+      gap:.55rem;
+      margin-top:.2rem;
+      font-size:.85rem;
+      color:var(--muted);
+    }
+    .dot{
+      width:8px;height:8px;border-radius:999px;background:#cbd5e1;
+    }
+    .dot.good{background:var(--good)}
+    .dot.warn{background:var(--warn)}
+    .dot.bad{background:var(--bad)}
+
+    .sep{
+      height:1px;
+      background:var(--border);
+      margin:1.1rem 0;
+    }
+
+    .actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:.7rem;
+      margin-top:1rem;
+    }
+    .btn{
+      border:none;
+      background:var(--blue);
+      color:#fff;
+      padding:.8rem 1.1rem;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .btn:disabled{opacity:.7; cursor:not-allowed}
+    .btn.ghost{
+      background:#fff;
+      color:var(--dark);
+      border:1px solid var(--border);
+    }
+    .btn:hover{opacity:.95; transform:translateY(-1px)}
+
+    /* Toasts */
+    .toastWrap{
+      position:fixed;
+      top:18px;
+      right:18px;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+      z-index:9999;
+    }
+    .toast{
+      background:#0b1220;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:.75rem .9rem;
+      box-shadow:0 14px 40px rgba(15,23,42,.25);
+      max-width:360px;
+      line-height:1.35;
+    }
+    .toast.good{background:#052e16}
+    .toast.bad{background:#3f1d1d}
+    .toast .r{display:flex; gap:.6rem; align-items:flex-start}
+    .toast .i{margin-top:.05rem}
+
+    @media (max-width: 980px){
+      .content{padding:1.25rem}
+      .wrap{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toastWrap" id="toastWrap"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">OptiResume</div>
+      <nav>
+        <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+        <a href="/my_uploads"><i class="ri-folder-line"></i> My Uploads</a>
+        <a href="/site/profile.html" class="active"><i class="ri-user-line"></i> Profile</a>
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+
+      <div class="foot">
+        <div style="font-weight:800;color:#e2e8f0;">Workspace</div>
+        <div>Account & Security</div>
+        <div style="margin-top:.6rem;opacity:.9;">Status: <span style="color:#86efac;font-weight:800;">Active</span></div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="top">
+        <div>
+          <h1 class="title">Profile Settings</h1>
+          <div class="subtitle">Update your account details. Password change is optional.</div>
+        </div>
+      </div>
+
+      <div class="wrap">
+        <!-- Left: identity card -->
+        <div class="card">
+          <div class="hd">
+            <h2>Identity</h2>
+            <span class="pill" id="authPill"><i class="ri-loader-4-line"></i> Loading</span>
+          </div>
+          <div class="bd profileBox">
+            <div class="who">
+              <div class="avatar" id="avatar">U</div>
+              <div style="min-width:0;">
+                <div class="name" id="whoName">—</div>
+                <div class="mail" id="whoEmail">—</div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div class="mini">
+              This account owns your uploads and analysis history. If you change your email, you’ll login using the new email next time.
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="card">
+          <div class="hd">
+            <h2>Account & Security</h2>
+            <div class="mini" id="whoami">Loading...</div>
+          </div>
+
+          <div class="bd">
+            <form id="profileForm" autocomplete="off">
+              <div class="grid">
+                <div class="row">
+                  <label for="username">Full Name</label>
+                  <input id="username" name="username" placeholder="Your name" required />
+                </div>
+
+                <div class="row">
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="you@email.com" required />
+                  <div class="mini">Used for login and ownership of uploads.</div>
+                </div>
+              </div>
+
+              <div class="sep"></div>
+
+              <div class="grid">
+                <div class="row">
+                  <label for="password">New Password</label>
+                  <div class="pwWrap">
+                    <input id="password" name="password" type="password" placeholder="Leave blank to keep current" />
+                    <button class="pwBtn" type="button" id="togglePass" aria-label="Show password">
+                      <i class="ri-eye-line"></i>
+                    </button>
+                  </div>
+                  <div class="strength" id="strengthRow">
+                    <span class="dot" id="strengthDot"></span>
+                    <span id="strengthText">Password change is optional.</span>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <label for="confirm">Confirm Password</label>
+                  <div class="pwWrap">
+                    <input id="confirm" type="password" placeholder="Re-type new password" />
+                    <button class="pwBtn" type="button" id="toggleConfirm" aria-label="Show password">
+                      <i class="ri-eye-line"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn ghost" type="button" id="resetBtn">
+                  <i class="ri-refresh-line"></i> Reset
+                </button>
+                <button class="btn" type="submit" id="saveBtn">
+                  <i class="ri-save-3-line"></i> Save changes
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        const toastWrap = document.getElementById("toastWrap")
+        const whoami = document.getElementById("whoami")
+        const authPill = document.getElementById("authPill")
+        const whoName = document.getElementById("whoName")
+        const whoEmail = document.getElementById("whoEmail")
+        const avatar = document.getElementById("avatar")
+
+        const form = document.getElementById("profileForm")
+        const saveBtn = document.getElementById("saveBtn")
+        const resetBtn = document.getElementById("resetBtn")
+
+        const passEl = document.getElementById("password")
+        const confirmEl = document.getElementById("confirm")
+        const togglePass = document.getElementById("togglePass")
+        const toggleConfirm = document.getElementById("toggleConfirm")
+
+        const strengthDot = document.getElementById("strengthDot")
+        const strengthText = document.getElementById("strengthText")
+
+        let original = { username:"", email:"" }
+
+        function toast(type, msg){
+          const el = document.createElement("div")
+          el.className = "toast " + (type || "info")
+          const icon = type==="good" ? "ri-check-line" : type==="bad" ? "ri-error-warning-line" : "ri-information-line"
+          el.innerHTML = `<div class="r"><div class="i"><i class="${icon}"></i></div><div>${msg}</div></div>`
+          toastWrap.appendChild(el)
+          setTimeout(()=>{ el.style.opacity="0"; el.style.transform="translateY(-6px)"; el.style.transition="250ms" }, 2600)
+          setTimeout(()=>el.remove(), 3000)
+        }
+
+        function setPill(ok, text){
+          authPill.innerHTML = ok ? `<i class="ri-shield-check-line"></i> ${text}` : `<i class="ri-error-warning-line"></i> ${text}`
+          authPill.style.border = "1px solid rgba(226,232,240,.9)"
+          authPill.style.background = "#fff"
+          authPill.style.color = ok ? "#065f46" : "#991b1b"
+        }
+
+        function initials(name){
+          const n = (name || "").trim()
+          if(!n) return "U"
+          const parts = n.split(/\s+/).filter(Boolean)
+          const a = parts[0]?.[0] || "U"
+          const b = parts.length > 1 ? parts[parts.length-1][0] : ""
+          return (a + b).toUpperCase()
+        }
+
+        function updateStrength(){
+          const p = passEl.value || ""
+          if(!p){
+            strengthDot.className = "dot"
+            strengthText.textContent = "Password change is optional."
+            return
+          }
+
+          let score = 0
+          if(p.length >= 8) score++
+          if(/[A-Z]/.test(p)) score++
+          if(/[0-9]/.test(p)) score++
+          if(/[^A-Za-z0-9]/.test(p)) score++
+
+          if(p.length < 6){
+            strengthDot.className = "dot bad"
+            strengthText.textContent = "Too short (min 6 characters)."
+            return
+          }
+
+          if(score >= 3){
+            strengthDot.className = "dot good"
+            strengthText.textContent = "Strong password."
+          }else if(score >= 2){
+            strengthDot.className = "dot warn"
+            strengthText.textContent = "Okay password (add uppercase/number/symbol)."
+          }else{
+            strengthDot.className = "dot bad"
+            strengthText.textContent = "Weak password (add number/symbol)."
+          }
+        }
+
+        function toggleInputType(input, btn){
+          if(input.type === "password"){
+            input.type = "text"
+            btn.innerHTML = `<i class="ri-eye-off-line"></i>`
+          }else{
+            input.type = "password"
+            btn.innerHTML = `<i class="ri-eye-line"></i>`
+          }
+        }
+
+        togglePass.addEventListener("click", () => toggleInputType(passEl, togglePass))
+        toggleConfirm.addEventListener("click", () => toggleInputType(confirmEl, toggleConfirm))
+        passEl.addEventListener("input", updateStrength)
+
+        async function loadProfile(){
+          try{
+            const res = await fetch("/profile", { credentials:"include" })
+            const data = await res.json()
+
+            if(data.error){
+              whoami.textContent = "Not authenticated"
+              setPill(false, "Session expired")
+              toast("bad", "Please login again.")
+              return
+            }
+
+            original.username = data.username || ""
+            original.email = data.email || ""
+
+            document.getElementById("username").value = original.username
+            document.getElementById("email").value = original.email
+
+            whoami.textContent = "Signed in as " + (original.email || "user")
+            setPill(true, "Authenticated")
+            whoName.textContent = original.username || "User"
+            whoEmail.textContent = original.email || "—"
+            avatar.textContent = initials(original.username)
+
+            updateStrength()
+          }catch(e){
+            whoami.textContent = "Failed to load profile"
+            setPill(false, "Unavailable")
+            toast("bad", "Could not load profile data.")
+          }
+        }
+
+        resetBtn.addEventListener("click", () => {
+          document.getElementById("username").value = original.username
+          document.getElementById("email").value = original.email
+          passEl.value = ""
+          confirmEl.value = ""
+          updateStrength()
+          toast("info", "Form reset.")
+        })
+
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault()
+
+          const username = document.getElementById("username").value.trim()
+          const email = document.getElementById("email").value.trim()
+          const pass = passEl.value
+          const confirm = confirmEl.value
+
+          if(!username || !email){
+            toast("bad", "Name and email are required.")
+            return
+          }
+
+          const wantsPasswordChange = !!(pass || confirm)
+          if(wantsPasswordChange){
+            if(pass.length < 6){
+              toast("bad", "Password should be at least 6 characters.")
+              return
+            }
+            if(pass !== confirm){
+              toast("bad", "Passwords do not match.")
+              return
+            }
+          }
+
+          const fd = new FormData()
+          fd.append("username", username)
+          fd.append("email", email)
+
+          // If backend requires password always, keep this fallback.
+          // Otherwise, you can delete this and only append when pass exists.
+          fd.append("password", wantsPasswordChange ? pass : "UNCHANGED")
+
+          const oldText = saveBtn.innerHTML
+          saveBtn.disabled = true
+          saveBtn.innerHTML = `<i class="ri-loader-4-line"></i> Saving...`
+
+          try{
+            const res = await fetch("/update_profile", {
+              method:"POST",
+              body: fd,
+              credentials:"include"
+            })
+
+            const json = await res.json()
+
+            if(json.error){
+              toast("bad", json.error)
+            }else{
+              toast("good", json.message || "Profile updated.")
+              original.username = username
+              original.email = email
+
+              whoami.textContent = "Signed in as " + email
+              whoName.textContent = username
+              whoEmail.textContent = email
+              avatar.textContent = initials(username)
+
+              passEl.value = ""
+              confirmEl.value = ""
+              updateStrength()
+            }
+          }catch(err){
+            toast("bad", "Update failed. Try again.")
+          }finally{
+            saveBtn.disabled = false
+            saveBtn.innerHTML = oldText
+          }
+        })
+
+        loadProfile()
+      </script>
+    </main>
+  </div>
+</body>
+</html>

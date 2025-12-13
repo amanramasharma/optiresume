@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Resume | OptiResume</title>
+
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --blue:#2563eb;
+      --dark:#0f172a;
+      --muted:#64748b;
+      --bg:#f1f5f9;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:#0f172a;
+    }
+    .layout{display:flex; min-height:100vh}
+
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#0b1220,#0f172a);
+      color:#fff;
+      padding:1.75rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .logo{
+      font-size:1.5rem;
+      font-weight:800;
+      text-align:center;
+      padding-bottom:1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    nav{margin-top:1.5rem; display:flex; flex-direction:column; gap:.4rem}
+    nav a{
+      display:flex; align-items:center; gap:.6rem;
+      padding:.8rem .95rem;
+      color:#cbd5e1; text-decoration:none;
+      border-radius:12px; transition:.2s;
+    }
+    nav a:hover, nav a.active{
+      background:rgba(255,255,255,.08); color:#fff;
+    }
+    .sidebar .foot{
+      margin-top:auto;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      font-size:.85rem;
+      color:#94a3b8;
+    }
+
+    .content{flex:1; padding:2rem; max-width:1100px}
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:1.25rem;
+    }
+    .title{
+      margin:0;
+      font-size:1.55rem;
+      letter-spacing:-.02em;
+    }
+    .subtitle{
+      margin-top:.35rem;
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.35;
+    }
+    .actions{display:flex; gap:.6rem; align-items:center}
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.7rem 1rem;
+      border-radius:12px;
+      font-weight:700;
+      font-size:.92rem;
+      text-decoration:none;
+      border:1px solid var(--border);
+      background:#fff;
+      color:#0f172a;
+      transition:.2s;
+      box-shadow:0 6px 18px rgba(15,23,42,.06);
+    }
+    .btn.primary{
+      background:var(--blue);
+      color:#fff;
+      border-color:transparent;
+    }
+    .btn:hover{transform:translateY(-1px); opacity:.95}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding:1.05rem 1.25rem .75rem;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+    .hd h2{
+      margin:0;
+      font-size:1rem;
+      letter-spacing:-.01em;
+    }
+    .bd{padding:1.1rem 1.25rem 1.25rem}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:1rem;
+    }
+    .row{display:flex; flex-direction:column; gap:.45rem}
+    label{
+      font-weight:800;
+      font-size:.9rem;
+    }
+    input, textarea{
+      width:100%;
+      padding:.7rem .75rem;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:.95rem;
+      outline:none;
+      background:#fff;
+    }
+    input:focus, textarea:focus{
+      border-color:rgba(37,99,235,.55);
+      box-shadow:0 0 0 4px rgba(37,99,235,.12);
+    }
+    textarea{resize:vertical; min-height:110px}
+    .help{
+      color:var(--muted);
+      font-size:.85rem;
+      line-height:1.35;
+    }
+    .sep{
+      height:1px;
+      background:var(--border);
+      margin:1.1rem 0;
+    }
+    .footerBar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:1rem;
+      margin-top:1.1rem;
+    }
+    .saveBtn{
+      border:none;
+      background:var(--blue);
+      color:#fff;
+      padding:.8rem 1.1rem;
+      border-radius:12px;
+      font-weight:800;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+    }
+    .saveBtn:disabled{opacity:.7; cursor:not-allowed}
+
+    .toastWrap{
+      position:fixed;
+      top:18px;
+      right:18px;
+      display:flex;
+      flex-direction:column;
+      gap:.5rem;
+      z-index:9999;
+    }
+    .toast{
+      background:#0b1220;
+      color:#fff;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:.75rem .9rem;
+      box-shadow:0 14px 40px rgba(15,23,42,.25);
+      max-width:360px;
+    }
+    .toast .row{display:flex; gap:.6rem; flex-direction:row; align-items:flex-start}
+    .toast .ic{margin-top:.05rem}
+    .toast.good{background:#052e16}
+    .toast.bad{background:#3f1d1d}
+
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:.85rem;
+      color:var(--muted);
+    }
+
+    @media (max-width: 980px){
+      .content{padding:1.25rem}
+      .grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toastWrap" id="toastWrap"></div>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo">OptiResume</div>
+      <nav>
+        <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+        <a href="/my_uploads" class="active"><i class="ri-folder-line"></i> My Uploads</a>
+        <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+        <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+      </nav>
+
+      <div class="foot">
+        <div style="font-weight:700;color:#e2e8f0;">Editing</div>
+        <div class="mono">{{ result.file_name | default("Resume") }}</div>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="top">
+        <div>
+          <h1 class="title">Edit Extracted Resume Data</h1>
+          <div class="subtitle">
+            Review the extracted fields and correct anything inaccurate. Saving will regenerate the score.
+          </div>
+        </div>
+
+        <div class="actions">
+          {% if result._id %}
+            <a class="btn" href="/view_resume/{{ result._id }}"><i class="ri-eye-line"></i> Preview</a>
+          {% endif %}
+          <a class="btn" href="/my_uploads"><i class="ri-arrow-left-line"></i> Back</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="hd">
+          <h2>Core Details</h2>
+          <div class="mono">Owner: {{ result.uploaded_by | default("--") }}</div>
+        </div>
+
+        <div class="bd">
+          <form id="editForm" method="POST" action="/save_resume">
+            <input type="hidden" name="uploaded_by" value="{{ result.uploaded_by | default('') }}" />
+            <input type="hidden" name="file_name" value="{{ result.file_name | default('') }}" />
+
+            {% set skillsVal = result.skills | default([]) %}
+            {% if skillsVal is string %}
+              {% set skillsText = skillsVal %}
+            {% else %}
+              {% set skillsText = skillsVal | join(", ") %}
+            {% endif %}
+
+            {% set coursesVal = result.courses | default([]) %}
+            {% if coursesVal is string %}
+              {% set coursesText = coursesVal %}
+            {% else %}
+              {% set coursesText = coursesVal | join(", ") %}
+            {% endif %}
+
+            {% set certsVal = result.certifications | default([]) %}
+            {% set projectsVal = result.projects | default([]) %}
+
+            <div class="grid">
+              <div class="row">
+                <label for="name">Full Name</label>
+                <input id="name" name="name" value="{{ result.name | default('') }}" required />
+              </div>
+
+              <div class="row">
+                <label for="email">Email</label>
+                <input id="email" name="email" value="{{ result.email | default('') }}" required />
+                <div class="help">Used for contact completeness and validation.</div>
+              </div>
+
+              <div class="row">
+                <label for="phone">Phone</label>
+                <input id="phone" name="phone" value="{{ result.phone | default('') }}" required />
+              </div>
+
+              <div class="row">
+                <label for="location">Location</label>
+                <input id="location" name="location" value="{{ result.location | default('') }}" />
+                <div class="help">City + Country is enough (e.g., London, UK).</div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div class="row">
+              <label for="summary">Professional Summary</label>
+              <textarea id="summary" name="summary" rows="4">{{ result.summary | default('') }}</textarea>
+              <div class="help">Aim for 2–3 lines with role + strengths + impact.</div>
+            </div>
+
+            <div class="grid" style="margin-top:1rem;">
+              <div class="row">
+                <label for="skills">Skills</label>
+                <input id="skills" name="skills" value="{{ skillsText | default('') }}" />
+                <div class="help">Comma-separated (8–15 is ideal).</div>
+              </div>
+
+              <div class="row">
+                <label for="courses">Relevant Coursework</label>
+                <input id="courses" name="courses" value="{{ coursesText | default('') }}" />
+                <div class="help">Comma-separated (optional).</div>
+              </div>
+            </div>
+
+            <div class="sep"></div>
+
+            <div class="grid">
+              <div class="row">
+                <label for="certifications">Certifications</label>
+                <textarea id="certifications" name="certifications" rows="6">{% if certsVal is string %}{{ certsVal }}{% else %}{% for c in certsVal %}{% if c.name %}{{ c.name }}{% else %}{{ c }}{% endif %}{% if not loop.last %}&#10;{% endif %}{% endfor %}{% endif %}</textarea>
+                <div class="help">One per line (e.g., AWS CCP, Azure DP-203).</div>
+              </div>
+
+              <div class="row">
+                <label for="projects">Projects</label>
+                <textarea id="projects" name="projects" rows="6">{% if projectsVal is string %}{{ projectsVal }}{% else %}{% for p in projectsVal %}{% if p.title %}{{ p.title }}{% else %}{{ p }}{% endif %}{% if not loop.last %}&#10;{% endif %}{% endfor %}{% endif %}</textarea>
+                <div class="help">One per line (we’ll format them nicely in the report).</div>
+              </div>
+            </div>
+
+            <div class="footerBar">
+              <div class="help">
+                Saving creates a new version and recalculates the score using the scoring engine.
+              </div>
+              <button id="saveBtn" class="saveBtn" type="submit">
+                <i class="ri-save-3-line"></i> Save changes
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <script>
+        const toastWrap = document.getElementById("toastWrap")
+        const form = document.getElementById("editForm")
+        const btn = document.getElementById("saveBtn")
+
+        function toast(type, message){
+          const el = document.createElement("div")
+          el.className = "toast " + (type || "info")
+          const icon = type==="good" ? "ri-check-line" : type==="bad" ? "ri-error-warning-line" : "ri-information-line"
+          el.innerHTML = `<div class="row"><div class="ic"><i class="${icon}"></i></div><div>${message}</div></div>`
+          toastWrap.appendChild(el)
+          setTimeout(() => { el.style.opacity="0"; el.style.transform="translateY(-6px)"; el.style.transition="250ms" }, 2600)
+          setTimeout(() => el.remove(), 3000)
+        }
+
+        if(form){
+          form.addEventListener("submit", () => {
+            if(btn.disabled) return
+            btn.disabled = true
+            btn.innerHTML = `<i class="ri-loader-4-line"></i> Saving...`
+            toast("info", "Saving updates and recalculating score...")
+          })
+        }
+      </script>
+    </main>
+  </div>
+</body>
+</html>

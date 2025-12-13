@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard | OptiResume</title>
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="icon" href="/site/images/favicon.png" type="image/png" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --blue:#2563eb;
+      --dark:#0f172a;
+      --gray:#f1f5f9;
+      --white:#ffffff;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --radius:14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--gray);
+      display:flex;
+      min-height:100vh;
+      color:#0f172a;
+    }
+
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#0b1220 0%, #0f172a 60%, #0b1220 100%);
+      color:var(--white);
+      padding:1.75rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      gap:1.25rem;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0.75rem 0.5rem 1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .brand img{max-width:160px; opacity:.98}
+
+    .sidebar nav{display:flex; flex-direction:column; gap:.4rem; margin-top:.5rem}
+    .sidebar nav a{
+      display:flex;
+      align-items:center;
+      gap:.65rem;
+      padding:.85rem .95rem;
+      color:#cbd5e1;
+      text-decoration:none;
+      border-radius:12px;
+      transition:.2s;
+    }
+    .sidebar nav a:hover,
+    .sidebar nav a.active{
+      background:rgba(255,255,255,.08);
+      color:#fff;
+    }
+
+    .sidebar .foot{
+      margin-top:auto;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      color:#94a3b8;
+      font-size:.85rem;
+      line-height:1.35;
+    }
+
+    .main{flex:1; padding:2rem; max-width:1100px}
+    .topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:1.25rem;
+    }
+    .topbar h1{
+      margin:0;
+      font-size:1.6rem;
+      letter-spacing:-.02em;
+    }
+    .sub{
+      margin-top:.35rem;
+      color:var(--muted);
+      font-size:.95rem;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:1.25rem;
+    }
+
+    .card{
+      background:var(--white);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+    }
+    .card .hd{
+      padding:1.1rem 1.25rem .75rem;
+      border-bottom:1px solid var(--border);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+    .card .hd h2{
+      margin:0;
+      font-size:1rem;
+      color:#0f172a;
+    }
+    .card .bd{padding:1.1rem 1.25rem 1.25rem}
+
+    .stats{
+      grid-column:span 12;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:1rem;
+    }
+    .stat{
+      padding:1.1rem 1.2rem;
+      border-radius:var(--radius);
+      border:1px solid var(--border);
+      background:#fff;
+      box-shadow:var(--shadow);
+    }
+    .stat .k{color:var(--muted); font-size:.9rem}
+    .stat .v{margin-top:.35rem; font-size:1.55rem; font-weight:800}
+    .stat .hint{margin-top:.25rem; font-size:.85rem; color:#94a3b8}
+
+    .uploadCard{grid-column:span 8}
+    .sideCard{grid-column:span 4}
+
+    .drop{
+      border:2px dashed #cbd5e1;
+      border-radius:var(--radius);
+      padding:1.75rem 1.25rem;
+      text-align:center;
+      transition:.2s;
+      background:linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+    }
+    .drop.drag{border-color:var(--blue); background:#eff6ff}
+    .drop label{cursor:pointer; display:block}
+    .drop .ico{font-size:2rem; color:var(--blue)}
+    .drop .t{margin-top:.35rem; font-weight:700}
+    .drop .d{margin-top:.35rem; color:var(--muted); font-size:.95rem}
+
+    input[type=file]{display:none}
+
+    .fileRow{
+      margin-top:1rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:.8rem 1rem;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+    }
+    .fileRow .name{font-weight:600; color:#0f172a; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+    .fileRow .meta{color:var(--muted); font-size:.85rem}
+    .btn{
+      background:var(--blue);
+      color:#fff;
+      border:none;
+      padding:.75rem 1.05rem;
+      border-radius:12px;
+      font-weight:700;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:.55rem;
+      transition:.2s;
+    }
+    .btn:disabled{opacity:.6; cursor:not-allowed}
+    .btn.secondary{
+      background:#0f172a;
+    }
+
+    .loader{
+      width:16px; height:16px;
+      border:2px solid rgba(255,255,255,.4);
+      border-top-color:#fff;
+      border-radius:50%;
+      animation:spin .8s linear infinite;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .list{display:flex; flex-direction:column; gap:.65rem}
+    .item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+      padding:.75rem .9rem;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+    }
+    .item .left{min-width:0}
+    .item .title{font-weight:650; font-size:.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .item .date{color:var(--muted); font-size:.82rem; margin-top:.2rem}
+    .badge{
+      font-size:.8rem;
+      padding:.25rem .65rem;
+      border-radius:999px;
+      background:#e0f2fe;
+      color:#0369a1;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .empty{
+      color:var(--muted);
+      font-size:.95rem;
+      line-height:1.45;
+    }
+
+    .toastWrap{
+      position:fixed;
+      right:18px;
+      top:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index:9999;
+    }
+    .toast{
+      width:min(360px, calc(100vw - 36px));
+      background:#0f172a;
+      color:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      box-shadow:0 14px 40px rgba(2,6,23,.25);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .toast .row{display:flex; align-items:flex-start; gap:10px}
+    .toast .ic{font-size:1.1rem; line-height:1.2}
+    .toast .msg{font-size:.92rem; line-height:1.35; color:#e2e8f0}
+    .toast.good{background:#052e16}
+    .toast.bad{background:#3b0a0a}
+    .toast.info{background:#0b1220}
+  </style>
+</head>
+
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="/site/images/logo.png" alt="OptiResume Logo" />
+    </div>
+
+    <nav>
+      <a href="/site/dashboard.html" class="active"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/my_uploads"><i class="ri-folder-line"></i> My Uploads</a>
+      <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+      <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+    </nav>
+
+    <div class="foot">
+      <div style="font-weight:700; color:#e2e8f0;">Enterprise Workspace</div>
+      <div>AI Resume Intelligence Suite</div>
+      <div style="margin-top:.6rem; opacity:.9;">Status: <span style="color:#86efac; font-weight:700;">Operational</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <div>
+        <h1 id="welcomeText">Welcome</h1>
+        <div class="sub">Upload a resume to extract structured data, compute a score, and generate improvements.</div>
+      </div>
+      <div>
+        <a href="/my_uploads" class="btn secondary"><i class="ri-folder-open-line"></i> View Uploads</a>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="stats">
+        <div class="stat">
+          <div class="k">Total Uploads</div>
+          <div class="v" id="totalUploads">0</div>
+          <div class="hint">Across your workspace</div>
+        </div>
+        <div class="stat">
+          <div class="k">Best Score</div>
+          <div class="v" id="bestScore">--</div>
+          <div class="hint">Highest resume score</div>
+        </div>
+        <div class="stat">
+          <div class="k">Avg Score</div>
+          <div class="v" id="avgScore">--</div>
+          <div class="hint">Average across uploads</div>
+        </div>
+      </div>
+
+      <section class="card uploadCard">
+        <div class="hd">
+          <h2>Resume Analysis</h2>
+          <div style="color:var(--muted); font-size:.9rem;">Supports PDF, DOCX, PNG/JPG</div>
+        </div>
+        <div class="bd">
+          <form id="uploadForm">
+            <div class="drop" id="dropZone">
+              <label for="resumeInput">
+                <div class="ico"><i class="ri-upload-cloud-2-line"></i></div>
+                <div class="t">Drag & drop or click to upload</div>
+                <div class="d">We’ll extract key sections and generate a score in seconds.</div>
+              </label>
+              <input type="file" id="resumeInput" name="resume" accept=".pdf,.docx,.png,.jpg,.jpeg" required />
+            </div>
+
+            <div class="fileRow" id="fileRow" style="display:none;">
+              <div class="left" style="min-width:0;">
+                <div class="name" id="selectedFileName"></div>
+                <div class="meta" id="selectedFileMeta"></div>
+              </div>
+              <button id="submitBtn" type="submit" class="btn">
+                <span id="btnIcon"><i class="ri-magic-line"></i></span>
+                <span id="btnText">Analyze Resume</span>
+              </button>
+            </div>
+          </form>
+
+          <div style="margin-top:1rem; color:var(--muted); font-size:.9rem;">
+            Tip: For best results, upload a text-based PDF. Scanned PDFs may take longer due to OCR.
+          </div>
+        </div>
+      </section>
+
+      <section class="card sideCard">
+        <div class="hd">
+          <h2>Recent Uploads</h2>
+          <a href="/my_uploads" style="color:var(--blue); text-decoration:none; font-weight:700; font-size:.9rem;">View all</a>
+        </div>
+        <div class="bd">
+          <div class="list" id="recentResumes">
+            <div class="empty">No uploads found yet. Upload a resume to see recent activity here.</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toastWrap" id="toastWrap"></div>
+
+<script src="/site/js/dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Resume Analysis | OptiResume</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="/site/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root{
+      --blue:#2563eb;
+      --dark:#0f172a;
+      --muted:#64748b;
+      --bg:#f1f5f9;
+      --card:#ffffff;
+      --border:#e2e8f0;
+      --radius:14px;
+      --shadow:0 8px 24px rgba(15,23,42,.08);
+      --good:#16a34a;
+      --warn:#f59e0b;
+      --bad:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:#0f172a;
+    }
+    .layout{display:flex; min-height:100vh}
+
+    /* Sidebar */
+    .sidebar{
+      width:260px;
+      background:linear-gradient(180deg,#0b1220,#0f172a);
+      color:#fff;
+      padding:1.75rem 1.1rem;
+      display:flex;
+      flex-direction:column;
+      border-right:1px solid rgba(255,255,255,.06);
+    }
+    .logo{
+      font-size:1.5rem;
+      font-weight:800;
+      text-align:center;
+      padding-bottom:1.25rem;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    nav{margin-top:1.5rem; display:flex; flex-direction:column; gap:.4rem}
+    nav a{
+      display:flex; align-items:center; gap:.6rem;
+      padding:.8rem .95rem;
+      color:#cbd5e1; text-decoration:none;
+      border-radius:12px; transition:.2s;
+    }
+    nav a:hover, nav a.active{
+      background:rgba(255,255,255,.08); color:#fff;
+    }
+    .sidebar .foot{
+      margin-top:auto;
+      padding-top:1rem;
+      border-top:1px solid rgba(255,255,255,.06);
+      font-size:.85rem;
+      color:#94a3b8;
+      line-height:1.35;
+    }
+
+    /* Main */
+    .main{flex:1; padding:2rem; max-width:1200px}
+    .top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:1rem;
+      margin-bottom:1.25rem;
+    }
+    .title{margin:0; font-size:1.65rem; letter-spacing:-.02em}
+    .subtitle{color:var(--muted); font-size:.95rem; line-height:1.35; margin-top:.35rem}
+    .actions{display:flex; gap:.6rem; flex-wrap:wrap}
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      gap:.45rem;
+      padding:.7rem 1rem;
+      border-radius:12px;
+      font-weight:700;
+      font-size:.92rem;
+      text-decoration:none;
+      border:1px solid var(--border);
+      background:#fff;
+      color:#0f172a;
+      cursor:pointer;
+      transition:.2s;
+      box-shadow:0 6px 18px rgba(15,23,42,.06);
+    }
+    .btn:hover{transform:translateY(-1px); opacity:.95}
+    .btn.primary{
+      background:var(--blue);
+      color:#fff;
+      border:none;
+      box-shadow:0 10px 22px rgba(37,99,235,.25);
+    }
+    .btn:disabled{opacity:.65; cursor:not-allowed; transform:none}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(12,1fr);
+      gap:1.25rem;
+    }
+    .card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    .hd{
+      padding:1rem 1.25rem;
+      border-bottom:1px solid var(--border);
+      font-weight:800;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1rem;
+    }
+    .hd small{font-weight:700; color:var(--muted)}
+    .bd{padding:1.25rem}
+
+    .summary{grid-column:span 12}
+    .left{grid-column:span 8}
+    .right{grid-column:span 4}
+
+    .kv p{margin:.35rem 0; line-height:1.45}
+    .kv strong{color:#0f172a}
+
+    .scoreBox{
+      display:flex;
+      flex-direction:column;
+      gap:.6rem;
+      padding:1rem;
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:linear-gradient(180deg,#fff,#fbfdff);
+    }
+    .scoreTop{display:flex; align-items:flex-start; justify-content:space-between; gap:1rem}
+    .scoreNum{font-size:1.9rem; font-weight:900; letter-spacing:-.02em}
+    .scoreTag{
+      display:inline-flex;
+      align-items:center;
+      gap:.4rem;
+      padding:.35rem .7rem;
+      border-radius:999px;
+      font-size:.82rem;
+      font-weight:900;
+      border:1px solid var(--border);
+      background:#fff;
+      white-space:nowrap;
+    }
+    .bar{
+      height:12px;
+      background:#e5e7eb;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid var(--border);
+    }
+    .bar div{
+      height:100%;
+      width:0%;
+      background:linear-gradient(90deg,#2563eb,#22c55e);
+    }
+    .hint{color:var(--muted); font-size:.92rem; line-height:1.35}
+
+    .chips{display:flex; flex-wrap:wrap; gap:.5rem}
+    .chip{
+      padding:.35rem .65rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-size:.85rem;
+      font-weight:650;
+      background:#fff;
+    }
+
+    .list{display:flex; flex-direction:column; gap:.75rem}
+    .item{
+      padding:.85rem 1rem;
+      border:1px solid var(--border);
+      border-radius:12px;
+      background:#fff;
+      line-height:1.45;
+    }
+    .item .t{font-weight:900}
+    .item .m{color:var(--muted); font-weight:650; margin-top:.15rem}
+    .item .d{margin-top:.55rem}
+
+    .rec{
+      border:1px solid #fde68a;
+      background:#fffbeb;
+      border-radius:12px;
+      padding:.8rem 1rem;
+      font-weight:700;
+      color:#92400e;
+      display:flex;
+      gap:.55rem;
+      line-height:1.35;
+    }
+
+    .empty{color:var(--muted); font-size:.95rem}
+
+    .toastWrap{
+      position:fixed;
+      right:18px;
+      top:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      z-index:9999;
+    }
+    .toast{
+      width:min(380px, calc(100vw - 36px));
+      background:#0b1220;
+      color:#fff;
+      border-radius:14px;
+      padding:12px 14px;
+      box-shadow:0 14px 40px rgba(2,6,23,.25);
+      border:1px solid rgba(255,255,255,.08);
+      line-height:1.35;
+    }
+    .toast.good{background:#052e16}
+    .toast.bad{background:#3b0a0a}
+    .toast .row{display:flex; gap:10px; align-items:flex-start}
+    .toast .ic{margin-top:1px}
+
+    @media (max-width: 980px){
+      .main{padding:1.25rem}
+      .left{grid-column:span 12}
+      .right{grid-column:span 12}
+    }
+  </style>
+</head>
+
+<body>
+<div class="toastWrap" id="toastWrap"></div>
+
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">OptiResume</div>
+    <nav>
+      <a href="/site/dashboard.html"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="/my_uploads"><i class="ri-folder-line"></i> My Uploads</a>
+      <a href="/site/profile.html"><i class="ri-user-line"></i> Profile</a>
+      <a href="/logout"><i class="ri-logout-box-line"></i> Logout</a>
+    </nav>
+    <div class="foot">
+      <div style="font-weight:900; color:#e2e8f0;">Enterprise Workspace</div>
+      <div>Resume Intelligence</div>
+      <div style="margin-top:.6rem;">Status: <span style="color:#86efac; font-weight:900;">Operational</span></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div>
+        <h1 class="title">Resume Analysis Report</h1>
+        <div class="subtitle">Structured extraction + deterministic scoring. Export the JSON for audit/debug.</div>
+      </div>
+      <div class="actions">
+        <a href="/my_uploads" class="btn"><i class="ri-arrow-left-line"></i> Back</a>
+        <button id="exportBtn" class="btn"><i class="ri-download-line"></i> Export JSON</button>
+        {% if result._id %}
+          <a href="/edit_resume/{{ result._id }}" class="btn primary"><i class="ri-edit-line"></i> Edit</a>
+        {% endif %}
+      </div>
+    </div>
+
+    {% set score = (result.resume_score or 0) | int %}
+    {% if score < 0 %}{% set score = 0 %}{% endif %}
+    {% if score > 100 %}{% set score = 100 %}{% endif %}
+
+    <div class="grid">
+      <section class="card summary">
+        <div class="hd">
+          <div>Overview</div>
+          <small>{{ result.file_name or "Resume" }}</small>
+        </div>
+
+        <div class="bd" style="display:flex;gap:1.25rem;flex-wrap:wrap">
+          <div class="kv" style="flex:1; min-width:280px">
+            <p><strong>Name:</strong> {{ result.name or "--" }}</p>
+            <p><strong>Email:</strong> {{ result.email or "--" }}</p>
+            <p><strong>Phone:</strong> {{ result.phone or "--" }}</p>
+            {% if result.location %}<p><strong>Location:</strong> {{ result.location }}</p>{% endif %}
+            {% if result.summary %}<p><strong>Summary:</strong> {{ result.summary }}</p>{% endif %}
+          </div>
+
+          <div style="width:360px; max-width:100%">
+            <div class="scoreBox">
+              <div class="scoreTop">
+                <div>
+                  <div style="color:var(--muted); font-weight:800; font-size:.9rem;">Resume Score</div>
+                  <div class="scoreNum">{{ score }}/100</div>
+                </div>
+
+                {% if score >= 85 %}
+                  <div class="scoreTag"><i class="ri-shield-check-line"></i> Strong</div>
+                {% elif score >= 70 %}
+                  <div class="scoreTag"><i class="ri-checkbox-circle-line"></i> Good</div>
+                {% else %}
+                  <div class="scoreTag"><i class="ri-tools-line"></i> Needs work</div>
+                {% endif %}
+              </div>
+
+              <div class="bar">
+                <div style="width: {{ score }}%"></div>
+              </div>
+
+              <div class="hint">Score reflects completeness + impact signals (projects, metrics, clear structure).</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="card left">
+        <div class="hd">Skills</div>
+        <div class="bd">
+          {% if result.skills %}
+            <div class="chips">
+              {% for s in result.skills %}
+                <span class="chip">{{ s }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty">No skills detected.</div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="card right">
+        <div class="hd">Recommendations</div>
+        <div class="bd">
+          {% if result.recommendations %}
+            <div class="list">
+              {% for r in result.recommendations %}
+                <div class="rec"><i class="ri-lightbulb-line"></i><div>{{ r }}</div></div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty">No recommendations generated.</div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="card left">
+        <div class="hd">Experience</div>
+        <div class="bd">
+          {% if result.experience %}
+            <div class="list">
+              {% for e in result.experience %}
+                <div class="item">
+                  <div class="t">{{ e.title or "Role" }}{% if e.company %} — {{ e.company }}{% endif %}</div>
+                  <div class="m">
+                    {% if e.duration %}{{ e.duration }}{% endif %}
+                    {% if e.location %} • {{ e.location }}{% endif %}
+                  </div>
+                  {% if e.description %}
+                    <div class="d">{{ e.description }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty">No experience found.</div>
+          {% endif %}
+        </div>
+      </section>
+
+      <section class="card left">
+        <div class="hd">Education</div>
+        <div class="bd">
+          {% if result.education %}
+            <div class="list">
+              {% for e in result.education %}
+                <div class="item">
+                  <div class="t">{{ e.degree or "Degree" }}</div>
+                  <div class="m">{{ e.institution or "--" }}{% if e.year %} • {{ e.year }}{% endif %}</div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="empty">No education found.</div>
+          {% endif %}
+        </div>
+      </section>
+
+      {% if result.projects %}
+      <section class="card left">
+        <div class="hd">Projects</div>
+        <div class="bd">
+          <div class="list">
+            {% for p in result.projects %}
+              {% if p.title %}
+                <div class="item">
+                  <div class="t">{{ p.title }}</div>
+                  {% if p.technologies_used %}<div class="m">{{ p.technologies_used | join(", ") }}</div>{% endif %}
+                  {% if p.description %}<div class="d">{{ p.description }}</div>{% endif %}
+                </div>
+              {% else %}
+                <div class="item"><div class="t">{{ p }}</div></div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+
+      {% if result.certifications %}
+      <section class="card left">
+        <div class="hd">Certifications</div>
+        <div class="bd">
+          <div class="list">
+            {% for c in result.certifications %}
+              {% if c.name %}
+                <div class="item">
+                  <div class="t">{{ c.name }}</div>
+                  <div class="m">
+                    {% if c.issued_by %}{{ c.issued_by }}{% endif %}
+                    {% if c.year %} • {{ c.year }}{% endif %}
+                  </div>
+                </div>
+              {% else %}
+                <div class="item"><div class="t">{{ c }}</div></div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+      {% endif %}
+    </div>
+  </main>
+</div>
+
+<!-- JSON payload for export -->
+<script id="resumeJson" type="application/json">{{ result | tojson }}</script>
+
+<script>
+  const toastWrap = document.getElementById("toastWrap")
+  function toast(type, msg){
+    const el = document.createElement("div")
+    el.className = "toast " + (type || "info")
+    el.innerHTML = `<div class="row"><div class="ic"><i class="${type==='good'?'ri-check-line':type==='bad'?'ri-error-warning-line':'ri-information-line'}"></i></div><div>${msg}</div></div>`
+    toastWrap.appendChild(el)
+    setTimeout(()=>{ el.style.opacity="0"; el.style.transform="translateY(-6px)"; el.style.transition="250ms" }, 2600)
+    setTimeout(()=>el.remove(), 3000)
+  }
+
+  const exportBtn = document.getElementById("exportBtn")
+  if (exportBtn) {
+    exportBtn.addEventListener("click", () => {
+      try{
+        const raw = document.getElementById("resumeJson").textContent || "{}"
+        const data = JSON.parse(raw)
+
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+        const a = document.createElement("a")
+        a.href = URL.createObjectURL(blob)
+
+        const safeName = (data.file_name || "resume")
+          .toString()
+          .replace(/[^\w\-\.]+/g, "_")
+          .slice(0, 80)
+
+        a.download = safeName + ".json"
+        a.click()
+        URL.revokeObjectURL(a.href)
+
+        toast("good", "Exported JSON successfully.")
+      }catch(e){
+        console.error(e)
+        toast("bad", "Export failed (invalid JSON payload).")
+      }
+    })
+  }
+</script>
+</body>
+</html>

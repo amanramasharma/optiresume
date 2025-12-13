@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/site/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="/site/images/favicon.png">
+  <title>OptiResume | Sign Up</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/site/css/login_style.css" />
+</head>
+
+<body>
+  <div class="auth-shell">
+    <div class="brand-side">
+      <div class="brand-top">
+        <a href="/site/index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;">
+          <img src="/site/images/logo.png" alt="OptiResume" />
+          <div class="brand-name">OptiResume</div>
+        </a>
+      </div>
+
+      <h1>Create your workspace.</h1>
+      <p>One account gives you access to your dashboard, uploads history, and AI-generated reports.</p>
+
+      <div class="pills">
+        <div class="pill">Secure login</div>
+        <div class="pill">Stored reports</div>
+        <div class="pill">Editable extraction</div>
+        <div class="pill">Client-ready UI</div>
+      </div>
+
+      <div class="brand-foot">
+        After signup, you’ll be redirected to login.
+      </div>
+    </div>
+
+    <div class="form-side">
+      <h2 class="title">Create account</h2>
+      <div class="sub">Enter your details to get started.</div>
+
+      <div class="alert" id="alertBox"></div>
+
+      <form id="signupForm" autocomplete="off">
+        <div class="field">
+          <label>Full Name</label>
+          <input type="text" name="username" placeholder="Your full name" required />
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input type="email" name="email" placeholder="you@email.com" required />
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input type="password" name="password" placeholder="Min 6 characters" required />
+        </div>
+
+        <button type="submit" class="btn" id="btn">
+          <span id="btnText">Sign Up</span>
+        </button>
+      </form>
+
+      <div class="small">
+        Already have an account? <a href="/site/login.html">Login</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("signupForm")
+    const btn = document.getElementById("btn")
+    const btnText = document.getElementById("btnText")
+    const alertBox = document.getElementById("alertBox")
+
+    function showError(msg){
+      alertBox.style.display = "block"
+      alertBox.textContent = msg
+    }
+    function clearError(){
+      alertBox.style.display = "none"
+      alertBox.textContent = ""
+    }
+    function setBusy(b){
+      btn.disabled = b
+      btnText.innerHTML = b ? '<span class="loader"></span> Creating...' : 'Sign Up'
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault()
+      clearError()
+      setBusy(true)
+
+      const fd = new FormData(form)
+
+      try{
+        const res = await fetch("/signup", { method:"POST", body: fd })
+
+        if(res.redirected){
+          window.location.href = res.url
+          return
+        }
+
+        const text = await res.text()
+        showError(text || "Signup failed. Please try again.")
+      }catch(err){
+        showError("Network error. Please try again.")
+      }finally{
+        setBusy(false)
+      }
+    })
+  </script>
+</body>
+</html>

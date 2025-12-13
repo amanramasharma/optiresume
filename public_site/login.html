@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="shortcut icon" href="/site/images/favicon.png" type="image/x-icon">
+  <link rel="icon" href="/site/images/favicon.png">
+  <title>OptiResume - Login</title>
+
+  <link rel="stylesheet" href="/site/css/login_style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    .error-banner{
+      display:none;
+      background:#fff1f2;
+      border:1px solid #fecdd3;
+      color:#9f1239;
+      padding:10px 12px;
+      border-radius:10px;
+      font-size:14px;
+      margin:12px 0 4px;
+      line-height:1.35;
+    }
+    .row-between{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:6px;
+    }
+    .remember{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      color:#334155;
+      user-select:none;
+    }
+    .remember input{ width:14px; height:14px }
+    .pwd-wrap{
+      position:relative;
+    }
+    .togglePwd{
+      position:absolute;
+      right:10px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      font-size:13px;
+      color:#475569;
+      padding:6px;
+    }
+    .togglePwd:hover{ color:#0f172a }
+    .login-btn[disabled]{
+      opacity:.75;
+      cursor:not-allowed;
+    }
+    .hint{
+      font-size:12px;
+      color:#64748b;
+      margin-top:10px;
+      text-align:center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="login-container">
+    <a href="/site/index.html">
+      <img src="/site/images/logo.png" alt="OptiResume" class="logo">
+    </a>
+
+    <h2>Welcome back</h2>
+    <p style="margin-top:-8px;color:#64748b;font-size:14px;">
+      Sign in to access your dashboard and uploads.
+    </p>
+
+    <div class="error-banner" id="errorBanner"></div>
+
+    <form id="loginForm">
+      <div class="input-group">
+        <input id="email" type="email" name="email" placeholder="Email" required autocomplete="email">
+      </div>
+
+      <div class="input-group pwd-wrap">
+        <input id="password" type="password" name="password" placeholder="Password" required autocomplete="current-password">
+        <button type="button" class="togglePwd" id="togglePwd">Show</button>
+      </div>
+
+      <div class="row-between">
+        <label class="remember">
+          <input type="checkbox" id="rememberMe">
+          Remember me
+        </label>
+        <a href="#" class="forgot-password" onclick="return false;">Forgot Password?</a>
+      </div>
+
+      <button type="submit" class="login-btn" id="loginBtn">Login</button>
+    </form>
+
+    <div class="signup-text">
+      Don't have an account? <a href="/site/signup.html">Sign Up</a>
+    </div>
+
+    <div class="hint">
+      Demo note: "Forgot Password" will be enabled in V2.
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("loginForm")
+    const loginBtn = document.getElementById("loginBtn")
+    const errorBanner = document.getElementById("errorBanner")
+    const togglePwd = document.getElementById("togglePwd")
+    const password = document.getElementById("password")
+
+    function showError(msg){
+      errorBanner.style.display = "block"
+      errorBanner.textContent = msg
+    }
+    function clearError(){
+      errorBanner.style.display = "none"
+      errorBanner.textContent = ""
+    }
+
+    togglePwd.addEventListener("click", () => {
+      const isHidden = password.type === "password"
+      password.type = isHidden ? "text" : "password"
+      togglePwd.textContent = isHidden ? "Hide" : "Show"
+    })
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault()
+      clearError()
+
+      const fd = new FormData(form)
+      const oldText = loginBtn.textContent
+      loginBtn.disabled = true
+      loginBtn.textContent = "Signing in..."
+
+      try{
+        const response = await fetch("/login", {
+          method: "POST",
+          body: fd,
+          credentials: "include"
+        })
+
+        if (response.redirected) {
+          window.location.href = response.url
+          return
+        }
+
+        const errText = await response.text()
+        showError("Invalid email or password. Please try again.")
+        console.log("Login failed:", errText)
+
+      }catch(err){
+        console.error("Login error:", err)
+        showError("Something went wrong. Please try again.")
+      }finally{
+        loginBtn.disabled = false
+        loginBtn.textContent = oldText
+      }
+    })
+  </script>
+</body>
+</html>
