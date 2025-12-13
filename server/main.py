@@ -9,11 +9,11 @@ from bson import ObjectId
 import uvicorn
 import gridfs
 import os
-from db import users_collection, db
-from parsers import parseResume
-from ai.analyzeResume import analyzeResume
-from models.resumeModel import ResumeModel
-from resume_score import score_resume
+from server.db import users_collection, db
+from server.parsers import parseResume
+from server.ai.analyzeResume import analyzeResume
+from server.models.resumeModel import ResumeModel
+from server.resume_score import score_resume
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from openai import OpenAI
