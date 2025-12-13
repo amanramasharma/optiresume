@@ -39,7 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/site", StaticFiles(directory="../public_site", html=True), name="site")
+app.mount("/site", StaticFiles(directory="public_site", html=True), name="site")
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
