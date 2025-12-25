@@ -164,3 +164,27 @@ source venv/bin/activate
 pip install -r requirements.txt
 
 uvicorn server.main:app --reload
+```
+
+Open:
+👉 http://127.0.0.1:8000
+
+
+⸻
+
+🔐 Environment Variables
+MONGO_URI=
+MONGO_DB_NAME=optiresume
+OPENAI_API_KEY=
+SESSION_SECRET=
+ENVIRONMENT=dev
+
+
+⸻
+
+👨‍💻 Author
+
+Aman Sharma
+Machine Learning Engineer 
+MSc Data Science – University of Surrey
+Python • AI • NLP • Backend Engineering
