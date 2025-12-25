@@ -173,17 +173,17 @@ Open:
 ⸻
 
 🔐 Environment Variables
-MONGO_URI=
-MONGO_DB_NAME=optiresume
-OPENAI_API_KEY=
-SESSION_SECRET=
-ENVIRONMENT=dev
+- MONGO_URI=
+- MONGO_DB_NAME=optiresume
+- OPENAI_API_KEY=
+- SESSION_SECRET=
+- ENVIRONMENT=dev
 
 ⸻
 
 👨‍💻 Author
 
-Aman Sharma
-Machine Learning Engineer 
-MSc Data Science – University of Surrey
-Python • AI • NLP • Backend Engineering
+- Aman Sharma
+- Machine Learning Engineer 
+- MSc Data Science – University of Surrey
+- Python • AI • NLP • Backend Engineering
