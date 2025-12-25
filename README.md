@@ -4,7 +4,7 @@ OptiResume is an end-to-end **AI-powered resume analysis and career assistance p
 
 Unlike traditional resume parsers or ATS checkers, OptiResume combines **document intelligence, structured extraction, scoring logic, and generative AI** to deliver actionable insights and personalized career tools.
 
-Link:- https://optiresume-zs11.onrender.com/site/index.html
+Link:- https://optiresume-zs11.onrender.com/
 
 ---
 
